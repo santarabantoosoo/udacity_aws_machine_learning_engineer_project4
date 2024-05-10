@@ -1,2 +1,36 @@
-# udacity_aws_machine_learning_engineer_project4
-Operationalizing an AWS ML Project project.
+## Justifications
+
+why ml.t3.medium in sagemaker? 
+
+Although it's not enough for training, finetuning or deploying, the code in the notebook specifies appropriate instances for each step according to its needs. Thus, I minimize costs by choosing t3 medium and I choose a more advanced instance according to each step requirements. 
+
+why t2.micro instance? 
+
+it is free and has more cpabilities than the nano instance. Micro is more suitable for the deep learning workflow 
+
+## Differences between sagemaker and EC2 instances training? 
+
+sagemaker used a training job and automatically deployed an endpoint. This is not possible via EC2 instance. 
+
+
+## what does the lambda function do? 
+
+It invokes the endpoint that I have created with the input (event). It then captures the result and decodes it. It finally returns a json object with result in the body element of the object.
+
+
+## Result of the lambda function 
+
+[[-9.012475967407227, -3.4303247928619385, -3.448119640350342, -0.7093339562416077, -4.625587463378906, -5.3794684410095215, -2.2025063037872314, -1.4724421501159668, -4.950315475463867, -0.37992194294929504, -1.6638377904891968, -3.8441951274871826, -3.661741256713867, 0.7892670035362244, -7.296304702758789, -5.472182750701904, -4.880095481872559, -3.762380838394165, -7.5275068283081055, 1.7123208045959473, -3.703493595123291, -0.8247228860855103, -8.712030410766602, -7.711690425872803, -7.729129314422607, -7.449378490447998, -5.527816295623779, -4.510913372039795, -3.077932596206665, -1.6040370464324951, -1.3113901615142822, -2.351273536682129, -6.071435451507568, -3.757622480392456, -6.266000747680664, -4.193880558013916, -3.373124361038208, -4.639616966247559, -1.000982642173767, -5.062832355499268, -1.2017751932144165, -1.9044816493988037, -0.43918102979660034, -2.9791555404663086, -1.794568419456482, -6.904004096984863, -1.2647199630737305, -1.1189892292022705, -1.7192206382751465, -3.2634994983673096, -4.541874885559082, -6.2093377113342285, -6.616756916046143, -4.267061233520508, -7.517358779907227, -2.777475357055664, -7.239434719085693, -6.869757652282715, -2.5160295963287354, -2.562119245529175, -6.7020487785339355, -6.388810157775879, -6.813495635986328, -5.148033618927002, -4.591104507446289, -5.910419464111328, -1.57993483543396, -6.065577507019043, -2.786738872528076, -2.5827760696411133, 1.4938132762908936, -5.049559116363525, -3.8505699634552, -3.8679561614990234, -4.724946022033691, -2.7245395183563232, -8.435440063476562, -3.280683755874634, -7.229022979736328, -6.1851372718811035, 0.35523712635040283, -6.01243257522583, 0.9766584038734436, -1.6117429733276367, -6.063785076141357, -6.848697185516357, -1.8787134885787964, -6.293821811676025, -3.7544474601745605, 0.07964559644460678, -8.741095542907715, -4.673928260803223, -5.831588268280029, -6.092616081237793, -5.853226661682129, -1.931592583656311, -4.797983646392822, -2.474534749984741, -5.598002910614014, -3.9744713306427, -9.064840316772461, -1.367488145828247, -3.65370774269104, -3.4648683071136475, -4.62518835067749, -6.217719554901123, -3.910379409790039, -0.5625689029693604, -3.729410171508789, -1.413669228553772, -1.9925819635391235, -3.033839225769043, -6.7566118240356445, -5.791793346405029, -5.71433687210083, -0.7404018044471741, -6.48143196105957, -1.214048147201538, -5.313121795654297, 0.09326773881912231, -2.188232183456421, -3.157092332839966, -5.433141231536865, -5.917296409606934, -7.114911079406738, -6.0802693367004395, -4.089468002319336, -2.0549285411834717, -6.099517822265625, -6.7221784591674805, -5.096475601196289, -3.1317739486694336, -6.113650321960449]]"
+
+
+## write up for security 
+
+Regarding security vulnerabilities, the lambda role has "FullAccess" for sagemaker. Although this helps me to invoke the endpoint but it may be too permissive and may lead to problems. I am the only one using this AWS account so I am not worried about roles for other people. However, this is something that I should be aware of if I am employed in a company. In that access, I need to periodically audit the roles to ensure that nothing needs to be editted or deleted. 
+
+
+
+## concurrency and auto scaling 
+
+I didn't change concurrency but I set autoscaling to a max of 2. I know that this is a trial project so I abided to a low auto scaling so as to avoid incurring more costs. I have set the target value to 10 which means that the endpoint needs 10 concurrent requests to scale up. Regarding the concurrency, I haven't changed it because it seems that my free tier doesn't allow me to modify concurrency. [eg. I have 0 instances available for provisioned concurrency.]
+
+In real projects when I have a high traffic and a low expected latency, I would go for higher concurrency and auto scaling. 

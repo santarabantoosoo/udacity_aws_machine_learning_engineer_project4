@@ -1,0 +1,4 @@
+endpoint=pytorch-inference-2024-05-09-07-56-12-633
+
+
+arn:aws:sts::058264158555:assumed-role/project4-role-ckmm1931/project4 
